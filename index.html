@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counting Down for a Surprise...</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, #fff5f7 0%, #ffd1dc 100%);
+            overflow: hidden;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        #countdown-container {
+            text-align: center;
+            transition: opacity 0.8s ease-in-out;
+            padding: 20px;
+        }
+
+        .title {
+            font-size: clamp(24px, 6vw, 45px);
+            color: #f70e8e;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* টাইম বক্স স্টাইল */
+        #timer {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff77aa, #f70e8e, #b9515f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .number {
+            font-size: clamp(40px, 12vw, 100px);
+            line-height: 1;
+        }
+
+        .label {
+            font-size: clamp(14px, 3vw, 22px);
+            color: #f70e8e;
+            margin-top: 5px;
+        }
+
+        .heart-icon {
+            font-size: 40px;
+            color: #ff77aa;
+            margin-top: 30px;
+            animation: heartBeat 1.2s infinite;
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-out { opacity: 0; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <div id="countdown-container">
+        <div class="title">Something Special is Coming...</div>
+        
+        <div id="timer">
+            <div class="time-unit">
+                <span class="number" id="days">00</span>
+                <span class="label">Days</span>
+            </div>
+            <div class="time-unit"><span class="number">:</span></div>
+            <div class="time-unit">
+                <span class="number" id="hours">00</span>
+                <span class="label">Hours</span>
+            </div>
+            <div class="time-unit"><span class="number">:</span></div>
+            <div class="time-unit">
+                <span class="number" id="minutes">00</span>
+                <span class="label">Mins</span>
+            </div>
+            <div class="time-unit"><span class="number">:</span></div>
+            <div class="time-unit">
+                <span class="number" id="seconds">00</span>
+                <span class="label">Secs</span>
+            </div>
+        </div>
+
+        <div class="heart-icon">
+            <i class="fa-solid fa-heart"></i>
+        </div>
+    </div>
+
+    <script>
+        // টার্গেট ডেট সেট করা হয়েছে: ২৯ আগস্ট, ২০২৫, রাত ১২:০০:০১ (রাত ১২টা বাজার ১ সেকেন্ড পর)
+        const targetDate = new Date("August 29, 2026 00:00:01").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            // যদি বর্তমান সময় ২৯ আগস্ট রাত ১২টা বা তার বেশি হয়ে থাকে
+            if (distance <= 0) {
+                window.location.href = "2.html";
+                return;
+            }
+
+            // দিন, ঘণ্টা, মিনিট, সেকেন্ড ক্যালকুলেশন
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // ডিসপ্লে আপডেট করা
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }
+
+        // পেজ লোড হওয়া মাত্র একবার চেক করা
+        updateCountdown();
+
+        // প্রতি সেকেন্ডে কাউন্টডাউন আপডেট করা
+        const timerInterval = setInterval(updateCountdown, 1000);
+    </script>
+
+</body>
+</html>
